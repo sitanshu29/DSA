@@ -1,0 +1,136 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node 
+{ 
+    int data; 
+    struct Node* left; 
+    struct Node* right; 
+    Node (int data) 
+    { 
+        this->data = data; 
+        left = right = NULL; 
+    } 
+}; 
+
+void preorder(Node *head)
+{
+	stack <Node*> st;
+	if (head == NULL)
+	return;
+	Node *temp = head;
+	st.push(head);
+	cout << temp->data << " ";
+	while(temp->left)
+	{
+		temp = temp->left;
+		cout << temp->data << " ";
+		st.push(temp);
+	}
+	while(!st.empty())
+	{
+		temp = st.top();
+		st.pop();
+		if (temp->right)
+		{
+			temp = temp->right;
+			cout << temp->data << " ";
+		}
+		while(temp->left)
+		{
+			temp = temp->left;
+			cout << temp->data << " ";
+			st.push(temp);
+		}
+	}
+}
+
+void inOrder(Node *head)
+{
+	stack <Node *> st;
+	if (head == NULL)
+	return;
+	Node *temp = head;
+	st.push(head);
+	while(temp->left)
+	{
+		temp = temp->left;
+		st.push(temp);
+	}
+	while(!st.empty())
+	{
+		temp = st.top();
+		st.pop();
+		cout << temp->data << " ";
+		if (temp->right)
+		{
+			temp = temp->right;
+			st.push(temp);
+		}
+		while(temp->left)
+		{
+			temp = temp->left;
+			st.push(temp);
+		}
+	}
+}
+
+void postOrder(Node *head)
+{
+	stack <Node *> st;
+	if (head == NULL)
+	return;
+	Node *temp = head;
+	st.push(head);
+	while(temp->left)
+	{
+		temp = temp->left;
+		st.push(temp);
+	}
+	while(!st.empty())
+	{
+		temp = st.top();
+		st.pop();
+		if (temp == NULL)
+		{
+			temp = st.top();
+			st.pop();
+			cout << temp->data;
+		}
+		else{
+		
+		if (temp->right)
+		{
+			st.push(temp->right);
+			temp = temp->right;
+			Node *null = NULL;
+			st.push(null);
+		}
+		while(temp->left)
+		{
+			temp = temp->left;
+			st.push(temp);
+		}
+	}
+	}
+}	
+  
+int main() 
+{ 
+  
+    /* Constructed binary tree is 
+              1 
+            /   \ 
+          2      3 
+        /  \ 
+      4     5 
+    */
+    struct Node *root = new Node(1); 
+    root->left        = new Node(2); 
+    root->right       = new Node(3); 
+    root->left->left  = new Node(4); 
+    root->left->right = new Node(5); 
+  
+    postOrder(root); 
+    return 0; 
+} 

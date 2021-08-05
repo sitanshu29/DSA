@@ -1,0 +1,119 @@
+#include <bits/stdc++.h> 
+using namespace std; 
+
+/* A binary tree node has data, pointer to left child 
+and a pointer to right child */
+class Node 
+{ 
+	public: 
+	int data; 
+	Node* left; 
+	Node* right; 
+}; 
+
+void display(stack <Node *> st)
+{
+	stack <Node *>temp;
+	while(!st.empty())
+	{
+		temp.push(st.top());
+		st.pop();
+	}
+	while (!temp.empty())
+	{
+		if (temp.top())
+		cout << temp.top()->data << " ";
+		temp.pop();
+	}
+}
+
+void printPaths(Node *head)
+{
+	if (head == NULL)
+	return;
+	stack <Node *> st;
+	Node *temp = head;
+	while (temp!= NULL)
+	{
+		st.push(temp);
+		temp = temp->left;
+	}
+	while (!st.empty())
+	{
+		temp = st.top();
+		if (temp == NULL)
+		{
+			st.pop();
+			st.pop();
+		}
+		else if (temp->right)
+		{
+			Node *null = NULL;
+			st.push(null);
+			temp = temp->right;
+			while (temp!= NULL)
+			{
+				st.push(temp);
+				temp = temp->left;
+			}
+		}
+		else
+		{
+			display(st);
+			st.pop();
+			cout << endl;
+		}
+	}
+}
+
+void printPathRec(Node *head)
+{
+	static stack <Node*> st;
+	if (head == NULL)
+	return;
+	else
+	{
+		st.push(head);
+		printPathRec(head->left);
+		if (head->right == NULL)
+		{
+			display(st);
+			cout << endl;
+			st.pop();
+		}
+		printPathRec(head->right);
+	}
+	
+}
+
+Node* newNode(int data) 
+{ 
+	Node* node = new Node(); 
+	node->data = data; 
+	node->left = NULL; 
+	node->right = NULL; 
+	
+	return(node); 
+} 
+
+
+
+
+/* Driver code */
+int main() 
+{ 
+	struct Node* root = newNode(10); 
+    root->left = newNode(11); 
+    root->left->left = newNode(7); 
+    root->right = newNode(9); 
+    root->right->left = newNode(15); 
+    root->right->right = newNode(8); 
+
+
+	/* Print all root-to-leaf 
+	paths of the input tree */
+	printPaths(root);
+	cout << "\n\n\n\n\n";
+	printPathRec(root); 
+	return 0; 
+} 
